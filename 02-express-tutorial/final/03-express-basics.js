@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
+app.use(cors())
 
 app.get('/', (req, res) => {
   console.log('user hit the resource')
@@ -17,8 +19,14 @@ app.get('/stream', (req, res) => {
 })
 
 let i = 0
+
 function send (res) {
-  res.write('data: ' + `hello from sse ---- [${i++}]\n\n`)
+  const data = {
+    message: `hello from sse ---- [${i++}]`,
+    timestamp: new Date().toISOString()
+  }
+  
+  res.write(`data: ${JSON.stringify(data)}\n\n`)
 
   setTimeout(() => send(res), 3000)
 }
