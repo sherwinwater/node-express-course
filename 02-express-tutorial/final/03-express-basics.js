@@ -10,6 +10,19 @@ app.get('/about', (req, res) => {
   res.status(200).send('About Page')
 })
 
+// server sent events
+app.get('/stream', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream')
+  send(res)
+})
+
+let i = 0
+function send (res) {
+  res.write('data: ' + `hello from sse ---- [${i++}]\n\n`)
+
+  setTimeout(() => send(res), 3000)
+}
+
 app.all('*', (req, res) => {
   res.status(404).send('<h1>resource not found</h1>')
 })
